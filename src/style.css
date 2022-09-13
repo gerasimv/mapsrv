@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#wrapper,
+#map {
+  font-family: Helvetica, Arial, sans-serif;
+  height: 100%;
+  min-height: 100%;
+}
+
+#map {
+  background-color: darkgrey;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  background-color: whitesmoke;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
+  width: fit-content;
+  box-shadow: 0px 4px 8px 0px #0000004f;
+}
+
+.button:hover {
+  transition: background-color 0.3s;
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(199, 199, 199);
+}
+
+.button-icon {
+  display: flex;
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+}
+
+.button_toggled {
+  background-color: rgb(255, 255, 255);
+}
+
+.button_toggled .button-icon {
+  transition: transform 0.2s;
+  transform: rotate(180deg);
+}
+
+.button-name {
+  margin-left: 5px;
+  margin-right: 3px;
+}
+
+.button-menu {
+  position: absolute;
+  box-shadow: 0px 4px 12px #0000004f;
+  background-color: whitesmoke;
+  top: 35px;
+  margin-left: -5px;
+  min-width: 8rem;
+  z-index: 1000;
+}
+
+.button-menu_hidden {
+  display: none;
+}
+
+.button-menu-list {
+  text-align: left;
+}
+
+.button-menu__item {
+  padding: 5px 10px;
+  padding-left: 25px;
+  cursor: pointer;
+}
+
+.button-menu__item:hover {
+  background-color: rgba(100, 100, 100, 0.1);
+  transition: background-color 0.2s;
+}
+
+.button-menu__item_active:before {
+  position: absolute;
+  font-family: "Material Symbols Outlined";
+  content: "done";
+  margin-left: -20px;
+}

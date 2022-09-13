@@ -1,0 +1,14 @@
+{
+  "layers": [
+    {
+      "id": "0",
+      "name": "Здания",
+      "layUrl": "./uploads/fab_sheep.json"
+    },
+    {
+      "id": "1",
+      "name": "Реки",
+      "layUrl": "./uploads/hills_riv.json"
+    }
+  ]
+}
