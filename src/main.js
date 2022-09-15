@@ -1,10 +1,9 @@
+var myMap;
 let curUrl = window.location;
 let url = new URL(curUrl);
 let searchParams = new URLSearchParams(url.search);
-let curMark = eval(searchParams.get("curMark"));
 console.log(curUrl + " -> " + searchParams.get("curObject"));
 
-var myMap;
 ymaps.ready(init);
 
 const objectsButton = document.querySelector("#objectsButton");
@@ -45,7 +44,7 @@ function init() {
     (event) => {
       // console.log(event);
       const evtTarget = event.target;
-      if (evtTarget.localName == "li") {
+      if (evtTarget.localName === "li") {
         event.stopPropagation();
         toggleResult = evtTarget.classList.toggle("button-menu__item_active");
         if (toggleResult) {
@@ -78,6 +77,7 @@ function getLayers() {
 
 function showLayer(layerUrl = "", objectManager) {
   if (layerUrl == "") return;
+
   $.ajax({ url: layerUrl }).done(function (data) {
     // console.log(data);
     objectManager.add(data);
@@ -86,15 +86,16 @@ function showLayer(layerUrl = "", objectManager) {
 
 function hideLayer(layerUrl = "", objectManager) {
   if (layerUrl == "") return;
+
   $.ajax({ url: layerUrl }).done(function (data) {
     // console.log(data);
     objectManager.remove(data);
   });
 }
 
+// TEST_URL = http://127.0.0.1:5500/index.html?curObject={%22type%22:%22polygon%22,%20%22coords%22:[[55.80,37.50],[55.80,37.40],[55.70,37.50],[55.70,37.40]],%22name%22:%22%D0%A2%D0%B5%D1%81%D1%82%D0%BE%D0%B2%D1%8B%D0%B9%20%D0%BF%D0%BE%D0%BB%D0%B8%D0%B3%D0%BE%D0%BD%22}
 function prepareObject(curObject) {
   const allowedTypes = ["polyline", "polygon"];
-  // http://127.0.0.1:5500/index.html?curObject={%22type%22:%22polygon%22,%20%22coords%22:[[55.80,37.50],[55.80,37.40],[55.70,37.50],[55.70,37.40]],%22name%22:%22%D0%A2%D0%B5%D1%81%D1%82%D0%BE%D0%B2%D1%8B%D0%B9%20%D0%BF%D0%BE%D0%BB%D0%B8%D0%B3%D0%BE%D0%BD%22}
   if (!curObject || !allowedTypes.includes(curObject.type))
     return console.error(
       "Ошибка преобразования в геообъект объекта",
