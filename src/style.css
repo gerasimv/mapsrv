@@ -8,8 +8,14 @@ body,
 #wrapper,
 #map {
   font-family: Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.5;
   height: 100%;
   min-height: 100%;
+}
+
+.container {
+  height: 100vh;
 }
 
 #map {
@@ -17,28 +23,23 @@ body,
 }
 
 .button {
+  font-size: 1.4rem;
+  position: relative;
   display: flex;
   align-items: center;
   background-color: whitesmoke;
-  border: 1px solid lightgray;
-  border-radius: 5px;
+  border: 0.1rem solid darkgray;
+  border-radius: 0.4rem;
+  box-shadow: 0 0.2rem 0.4rem 0 #00000033;
   cursor: pointer;
-  font-size: 18px;
-  padding: 5px;
+  padding: 0.5rem;
   width: fit-content;
-  box-shadow: 0px 4px 8px 0px #0000004f;
+  margin: 2rem;
 }
 
 .button:hover {
   transition: background-color 0.3s;
   background-color: rgb(230, 230, 230);
-  border: 1px solid rgb(199, 199, 199);
-}
-
-.button-icon {
-  display: flex;
-  transition: transform 0.2s;
-  transform: rotate(0deg);
 }
 
 .button_toggled {
@@ -50,32 +51,37 @@ body,
   transform: rotate(180deg);
 }
 
+.button-icon {
+  display: flex;
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+}
+
 .button-name {
-  margin-left: 5px;
-  margin-right: 3px;
+  margin-left: 0.5rem;
+  margin-right: 0.3rem;
 }
 
 .button-menu {
   position: absolute;
-  box-shadow: 0px 4px 12px #0000004f;
-  background-color: whitesmoke;
-  top: 35px;
-  margin-left: -5px;
-  min-width: 8rem;
+  top: 3.5rem;
   z-index: 1000;
+  font-size: 1.8rem;
+  box-shadow: 0px 0.5rem 1.5rem #00000044;
+  background-color: whitesmoke;
 }
 
 .button-menu_hidden {
   display: none;
 }
 
-.button-menu-list {
+.button-menu__list {
   text-align: left;
+  list-style: none;
 }
 
 .button-menu__item {
-  padding: 5px 10px;
-  padding-left: 25px;
+  padding: 0.5rem 2.5rem 0.5rem 2.5rem;
   cursor: pointer;
 }
 
@@ -88,5 +94,5 @@ body,
   position: absolute;
   font-family: "Material Symbols Outlined";
   content: "done";
-  margin-left: -20px;
+  margin-left: -2rem;
 }

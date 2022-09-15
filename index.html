@@ -22,28 +22,22 @@
   </head>
 
   <body>
-    <button
-      id="objectsButton"
-      class="button"
-      title="{{data.title}}"
-      style="position: relative"
-    >
-      <span class="material-symbols-outlined"> auto_awesome_motion </span>
-      <span class="button-name">Слои</span>
-      <div class="button-icon">
-        <span class="material-symbols-outlined"> expand_more </span>
+    <div class="container">
+      <div id="wrapper">
+        <button id="objectsButton" class="button">
+          <span class="material-symbols-outlined"> auto_awesome_motion </span>
+          <span class="button-name">Слои</span>
+          <div class="button-icon">
+            <span class="material-symbols-outlined"> expand_more </span>
+          </div>
+          <div class="button-menu button-menu_hidden">
+            <ul class="button-menu__list">
+              <!-- <li class="button-menu__item">Реки</li> -->
+            </ul>
+          </div>
+        </button>
+        <div id="map"></div>
       </div>
-      <div class="button-menu button-menu_hidden">
-        <ul class="button-menu-list">
-          <li class="button-menu__item">Реки</li>
-          <li class="button-menu__item">Дороги</li>
-          <li class="button-menu__item">Границы</li>
-        </ul>
-      </div>
-    </button>
-
-    <div id="wrapper">
-      <div id="map"></div>
     </div>
   </body>
   <script src="src/main.js"></script>
