@@ -2,7 +2,7 @@ var myMap;
 let curUrl = window.location;
 let url = new URL(curUrl);
 let searchParams = new URLSearchParams(url.search);
-console.log(curUrl + " -> " + searchParams.get("curObject"));
+// console.log(curUrl + " -> " + searchParams.get("curObject"));
 
 ymaps.ready(init);
 
@@ -11,9 +11,9 @@ const objectsButtonMenu = document.querySelector(".button-menu");
 const objectsButtonMenuList = document.querySelector(".button-menu__list");
 
 // add layer on map
-function init() {
-  getLayers();
+getLayers();
 
+function init() {
   var myMap = new ymaps.Map(
     "map",
     {
@@ -29,9 +29,11 @@ function init() {
     clusterize: true,
   });
 
+  // Прробуем получить объект из строки get-запроса
   if (searchParams.get("curObject")) {
     var curObject = JSON.parse(searchParams.get("curObject"));
     var curGeoObject = prepareObject(curObject);
+    // Если получилось сконверитровать объект из строки get-запроса добаляем его на карту
     if (curGeoObject !== undefined) myMap.geoObjects.add(curGeoObject);
   } else {
     console.info("В get-запросе не найден объект для отображения");
