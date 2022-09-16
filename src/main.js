@@ -1,20 +1,20 @@
-var myMap;
-let curUrl = window.location;
-let url = new URL(curUrl);
-let searchParams = new URLSearchParams(url.search);
 // console.log(curUrl + " -> " + searchParams.get("curObject"));
 
 ymaps.ready(init);
 
-const objectsButton = document.querySelector("#objectsButton");
-const objectsButtonMenu = document.querySelector(".button-menu");
-const objectsButtonMenuList = document.querySelector(".button-menu__list");
-
-// add layer on map
-getLayers();
+// Create layer selector on map
 
 function init() {
-  var myMap = new ymaps.Map(
+  let myMap;
+  const curUrl = window.location;
+  const url = new URL(curUrl);
+  const searchParams = new URLSearchParams(url.search);
+  const objectsButton = document.querySelector("#objectsButton");
+  const objectsButtonMenu = document.querySelector(".button-menu");
+
+  getLayers();
+
+  myMap = new ymaps.Map(
     "map",
     {
       center: [55.76, 37.64],
@@ -25,9 +25,7 @@ function init() {
     }
   );
 
-  var objectManager = new ymaps.ObjectManager({
-    clusterize: true,
-  });
+  const objectManager = new ymaps.ObjectManager({});
 
   // Прробуем получить объект из строки get-запроса
   if (searchParams.get("curObject")) {
@@ -64,6 +62,7 @@ function init() {
 }
 
 function getLayers() {
+  const objectsButtonMenuList = document.querySelector(".button-menu__list");
   $.ajax({
     url: "./uploads/00_layers_ind.json",
   }).done(function (data) {
