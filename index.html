@@ -8,28 +8,102 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
     />
-    <link rel="stylesheet" href="src/style.css" />
     <title>Картография</title>
-    <script
-      src="https://api-maps.yandex.ru/2.1/?lang=ru_RU>"
-      type="text/javascript"
-    ></script>
-    <script
-      src="https://yandex.st/jquery/2.2.3/jquery.js"
-      type="text/javascript"
-    ></script>
-    <link rel="stylesheet" href="src/style.css" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body,
+      #wrapper,
+      #map {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 10px;
+        line-height: 1.5;
+        height: 100%;
+        min-height: 100%;
+      }
+
+      .container {
+        height: 100vh;
+      }
+
+      #map {
+        background-color: darkgrey;
+      }
+
+      .button {
+        z-index: 1000;
+        font-size: 1.2rem;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        background-color: whitesmoke;
+        border: none;
+        border-radius: 0.3rem;
+        box-shadow: 0 0.2rem 0.4rem 0 #00000033;
+        cursor: pointer;
+        padding: 0.7rem 0.8rem;
+        margin: 1rem 1rem 1rem 37.5rem;
+      }
+
+      .button:hover {
+        transition: background-color 0.3s;
+        background-color: rgb(230, 230, 230);
+      }
+
+      .button_toggled {
+        background-color: rgb(255, 255, 255);
+      }
+
+      .button-name {
+        margin: 0 0.5rem;
+      }
+
+      .button-menu {
+        position: absolute;
+        top: 3rem;
+        z-index: 1000;
+        font-size: 1.4rem;
+        box-shadow: 0px 0.5rem 1.5rem #00000044;
+        background-color: whitesmoke;
+      }
+
+      .button-menu_hidden {
+        display: none;
+      }
+
+      .button-menu__list {
+        text-align: left;
+        list-style: none;
+      }
+
+      .button-menu__item {
+        padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+        cursor: pointer;
+      }
+
+      .button-menu__item:hover {
+        background-color: rgba(100, 100, 100, 0.1);
+        transition: background-color 0.2s;
+      }
+
+      .button-menu__item_active:before {
+        position: absolute;
+        content: "\003E";
+        margin-left: -1.4rem;
+      }
+    </style>
   </head>
 
   <body>
     <div class="container">
       <div id="wrapper">
         <button id="objectsButton" class="button">
-          <span class="material-symbols-outlined"> auto_awesome_motion </span>
           <span class="button-name">Слои</span>
-          <div class="button-icon">
-            <span class="material-symbols-outlined"> expand_more </span>
-          </div>
           <div class="button-menu button-menu_hidden">
             <ul class="button-menu__list">
               <!-- <li class="button-menu__item">Реки</li> -->
@@ -40,5 +114,474 @@
       </div>
     </div>
   </body>
-  <script src="src/main.js"></script>
+  <script
+    src="https://api-maps.yandex.ru/2.1/?lang=ru_RU>"
+    type="text/javascript"
+  ></script>
+  <script>
+    var inspectedObject = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          id: 111,
+          options: {
+            fillColor: "#F3722C",
+            strokeColor: "#F94144",
+            opacity: 0.8,
+            strokeWidth: 2,
+          },
+          properties: {
+            balloonContent: "Исследуемый объект",
+            hintContent: "Произвольный многоугольник",
+          },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [55.801280971180454, 37.552642822265625],
+                [55.81285742969946, 37.518310546875],
+                [55.8367712028016, 37.540283203125],
+                [55.80784138701898, 37.57118225097656],
+                [55.801280971180454, 37.552642822265625],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
+    console.log(inspectedObject);
+
+    function getPolygonCenter(geoObject) {}
+
+    var layersInd = [
+      {
+        id: "0",
+        name: "Здания",
+        layData: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              id: 0,
+              geometry: {
+                type: "Point",
+                coordinates: [55.831903, 37.411961],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Метка с iconContent",
+                hintContent: "Текст подсказки",
+                iconContent: "1",
+              },
+              options: {
+                iconColor: "#ff0000",
+                preset: "islands#blueCircleIcon",
+              },
+            },
+            {
+              type: "Feature",
+              id: 1,
+              geometry: {
+                type: "Point",
+                coordinates: [55.763338, 37.565466],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+              },
+              options: { preset: "islands#blueSportCircleIcon" },
+            },
+            {
+              type: "Feature",
+              id: 2,
+              geometry: {
+                type: "Point",
+                coordinates: [55.763338, 37.665466],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+              },
+              options: { preset: "islands#blueSportIcon" },
+            },
+            {
+              type: "Feature",
+              id: 3,
+              geometry: {
+                type: "Point",
+                coordinates: [55.744522, 37.616378],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+                iconContent: "22",
+              },
+              options: { preset: "islands#blueIcon" },
+            },
+            {
+              type: "Feature",
+              id: 4,
+              geometry: {
+                type: "Point",
+                coordinates: [55.780898, 37.642889],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+                iconContent: "я тут!",
+              },
+              options: { preset: "islands#blueStretchyIcon" },
+            },
+            {
+              type: "Feature",
+              id: 5,
+              geometry: {
+                type: "Point",
+                coordinates: [55.793559, 37.435983],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+              },
+              options: { preset: "islands#blueDotIcon" },
+            },
+            {
+              type: "Feature",
+              id: 6,
+              geometry: {
+                type: "Point",
+                coordinates: [55.800584, 37.675638],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+              },
+              options: { preset: "islands#blueCircleDotIcon" },
+            },
+            {
+              type: "Feature",
+              id: 7,
+              geometry: {
+                type: "Point",
+                coordinates: [55.716733, 37.589988],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+                iconCaption: "Подпись метки",
+              },
+              options: { preset: "islands#blueGovernmentCircleIcon" },
+            },
+            {
+              type: "Feature",
+              id: 8,
+              geometry: { type: "Point", coordinates: [55.815724, 37.56084] },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                clusterCaption: "Еще одна метка",
+                hintContent: "Текст подсказки",
+                iconCaption: "Подпись метки",
+              },
+              options: { preset: "islands#blueGovernmentIcon" },
+            },
+          ],
+        },
+      },
+      {
+        id: "1",
+        name: "Реки",
+        layData: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              id: 10,
+              geometry: { type: "Point", coordinates: [55.87417, 37.669838] },
+              properties: {
+                balloonContent: "У меня нестандартный курсор",
+                clusterCaption: "У меня нестандартный курсор",
+                hintContent: "У меня нестандартный курсор",
+              },
+              options: { iconColor: "#ff0000", cursor: "help" },
+            },
+            {
+              type: "Feature",
+              id: 11,
+              geometry: {
+                type: "Polygon",
+                coordinates: [
+                  [55.801280971180454, 37.552642822265625],
+                  [55.81285742969946, 37.518310546875],
+                  [55.8367712028016, 37.540283203125],
+                  [55.80784138701898, 37.57118225097656],
+                  [55.801280971180454, 37.552642822265625],
+                ],
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                hintContent: "Текст подсказки",
+              },
+              options: {
+                fillColor: "#255F06",
+                strokeColor: "#255F06",
+                opacity: 0.5,
+              },
+            },
+            {
+              type: "Feature",
+              id: 12,
+              options: {
+                fillColor: "#255F06",
+                strokeColor: "#255F06",
+                opacity: 0.5,
+              },
+              properties: {
+                balloonContent: "Содержимое Прямоугольник",
+                hintContent: "Текст подсказки",
+              },
+              geometry: {
+                type: "Polygon",
+                coordinates: [
+                  [
+                    [55.801280971180454, 37.552642822265625],
+                    [55.81285742969946, 37.518310546875],
+                    [55.8367712028016, 37.540283203125],
+                    [55.80784138701898, 37.57118225097656],
+                    [55.801280971180454, 37.552642822265625],
+                  ],
+                ],
+              },
+            },
+            {
+              type: "Feature",
+              id: 13,
+              options: { strokeWidth: 3, strokeColor: "277da1" },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                hintContent: "Текст подсказки",
+              },
+              geometry: {
+                type: "LineString",
+                coordinates: [
+                  [55.80899899270488, 37.77442932128906],
+                  [55.800895029938275, 37.74696350097656],
+                  [55.795877445664104, 37.709197998046875],
+                  [55.79317540171731, 37.69203186035156],
+                  [55.78197922246133, 37.670059204101555],
+                  [55.77155230069221, 37.64671325683594],
+                  [55.77386963550729, 37.63023376464844],
+                  [55.77193853272883, 37.60276794433594],
+                  [55.77039358162004, 37.596588134765625],
+                  [55.79433344350657, 37.54852294921875],
+                  [55.79973718325882, 37.530670166015625],
+                  [55.80629785921945, 37.51213073730469],
+                  [55.811314100800935, 37.51556396484375],
+                ],
+              },
+            },
+            {
+              type: "Feature",
+              id: 14,
+              options: {
+                fillColor: "#66ff99",
+                strokeColor: "#55aa99",
+                opacity: 0.5,
+              },
+              properties: {
+                balloonContent: "Содержимое балуна",
+                hintContent: "Текст подсказки",
+              },
+              geometry: {
+                type: "Polygon",
+                coordinates: [
+                  [
+                    [55.810156563965364, 37.777862548828125],
+                    [55.82635894724889, 37.777862548828125],
+                    [55.82635894724889, 37.81837463378906],
+                    [55.810156563965364, 37.81837463378906],
+                    [55.810156563965364, 37.777862548828125],
+                  ],
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ];
+
+    ymaps.ready(init);
+
+    // Create layer selector on map
+
+    function init() {
+      let myMap;
+      const curUrl = window.location;
+      const url = new URL(curUrl);
+      const searchParams = new URLSearchParams(url.search);
+      const objectsButton = document.querySelector("#objectsButton");
+      const objectsButtonMenu = document.querySelector(".button-menu");
+
+      getLayers();
+
+      myMap = new ymaps.Map(
+        "map",
+        {
+          //center: [55.76, 37.64],
+          bounds: ymaps.util.bounds.fromPoints(
+            inspectedObject.features[0].geometry.coordinates[0]
+          ),
+        },
+        {
+          searchControlProvider: "yandex#search",
+        }
+      );
+
+      const objectManager = new ymaps.ObjectManager({});
+
+      // Прробуем получить объект из строки get-запроса
+      if (searchParams.get("curObject")) {
+        var curObject = JSON.parse(searchParams.get("curObject"));
+        var curGeoObject = prepareObject(curObject);
+        // Если получилось сконверитровать объект из строки get-запроса добаляем его на карту
+        if (curGeoObject !== undefined) myMap.geoObjects.add(curGeoObject);
+      } else {
+        console.info("В get-запросе не найден объект для отображения");
+      }
+
+      myMap.geoObjects.add(objectManager);
+
+      objectManager.add(inspectedObject);
+
+      objectsButton.addEventListener(
+        "click",
+        (event) => {
+          // console.log(event);
+          const evtTarget = event.target;
+          if (evtTarget.localName === "li") {
+            event.stopPropagation();
+            toggleResult = evtTarget.classList.toggle(
+              "button-menu__item_active"
+            );
+            if (toggleResult) {
+              showLayer(evtTarget.dataset.layerUrl, objectManager);
+            } else {
+              hideLayer(evtTarget.dataset.layerUrl, objectManager);
+            }
+          } else {
+            objectsButton.classList.toggle("button_toggled");
+            objectsButtonMenu.classList.toggle("button-menu_hidden");
+          }
+        },
+        false
+      );
+    }
+
+    function getLayers() {
+      const objectsButtonMenuList =
+        document.querySelector(".button-menu__list");
+      let itemsTempl = "";
+      for (let item of layersInd) {
+        itemsTempl += `<li class="button-menu__item" data-layer-url="${item.id}">${item.name}</li>`;
+      }
+      objectsButtonMenuList.innerHTML = itemsTempl;
+    }
+
+    function showLayer(layerId = "", objectManager) {
+      if (layerId == "") return;
+
+      let curentLayer = layersInd.filter((item) => item.id == layerId);
+      console.log(curentLayer);
+
+      objectManager.add(curentLayer[0].layData);
+    }
+
+    function hideLayer(layerId = "", objectManager) {
+      if (layerId == "") return;
+
+      let curentLayer = layersInd.filter((item) => item.id == layerId);
+      console.log(curentLayer);
+
+      objectManager.remove(curentLayer[0].layData);
+    }
+
+    // TEST_URL = http://127.0.0.1:5500/index.html?curObject={%22type%22:%22polygon%22,%20%22coords%22:[[55.80,37.50],[55.80,37.40],[55.70,37.50],[55.70,37.40]],%22name%22:%22%D0%A2%D0%B5%D1%81%D1%82%D0%BE%D0%B2%D1%8B%D0%B9%20%D0%BF%D0%BE%D0%BB%D0%B8%D0%B3%D0%BE%D0%BD%22}
+
+    function prepareObject(curObject) {
+      const allowedTypes = ["polyline", "polygon"];
+      if (!curObject || !allowedTypes.includes(curObject.type))
+        return console.error(
+          "Ошибка преобразования в геообъект объекта",
+          curObject
+        );
+
+      const objectType = curObject.type;
+      if (objectType === "polyline") {
+        return new ymaps.Polyline(
+          // Указываем координаты вершин ломаной.
+          curObject.coords,
+          {
+            // Содержимое балуна.
+            balloonContent: curObject.name,
+          },
+          {
+            // Задаем опции геообъекта.
+            // Отключаем кнопку закрытия балуна.
+            balloonCloseButton: false,
+            // Цвет линии.
+            strokeColor: "#345543",
+            // Ширина линии.
+            strokeWidth: 4,
+            // Коэффициент прозрачности.
+            strokeOpacity: 0.8,
+          }
+        );
+      } else if (objectType == "polygon") {
+        return new ymaps.GeoObject(
+          {
+            // Описываем геометрию геообъекта.
+            geometry: {
+              // Тип геометрии - "Многоугольник".
+              type: "Polygon",
+              // Указываем координаты вершин многоугольника.
+              coordinates: [
+                // Координаты вершин внешнего контура.
+                curObject.coords,
+              ],
+              // Задаем правило заливки внутренних контуров по алгоритму "nonZero".
+              fillRule: "nonZero",
+            },
+            // Описываем свойства геообъекта.
+            properties: {
+              // Содержимое балуна.
+              balloonContent: "Многоугольник",
+            },
+          },
+          {
+            // Описываем опции геообъекта.
+            // Цвет заливки.
+            fillColor: "#009900",
+            // Цвет обводки.
+            strokeColor: "#000055",
+            // Общая прозрачность (как для заливки, так и для обводки).
+            opacity: 0.6,
+            // Ширина обводки.
+            strokeWidth: 4,
+            // Стиль обводки.
+            strokeStyle: "solid",
+          }
+        );
+      } else {
+        return;
+      }
+    }
+  </script>
 </html>
