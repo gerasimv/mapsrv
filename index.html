@@ -114,65 +114,17 @@
     type="text/javascript"
   ></script> -->
   <script>
-    function Point(x, y) {
-      this.x = x;
-      this.y = y;
-    }
-
-    function Region(points) {
-      this.points = points || [];
-      this.length = points.length;
-    }
-
-    Region.prototype.area = function () {
-      let area = 0,
-        i,
-        j,
-        point1,
-        point2;
-
-      for (i = 0, j = this.length - 1; i < this.length; j = i, i++) {
-        point1 = this.points[i];
-        point2 = this.points[j];
-        area += point1[0] * point2[1];
-        area -= point1[1] * point2[0];
-      }
-      area /= 2;
-
-      return area;
-    };
-
-    Region.prototype.centroid = function () {
-      let x = 0,
-        y = 0,
-        i,
-        j,
-        f,
-        point1,
-        point2;
-
-      for (i = 0, j = this.length - 1; i < this.length; j = i, i++) {
-        point1 = this.points[i];
-        point2 = this.points[j];
-        f = point1[0] * point2[1] - point2[0] * point1[1];
-        x += (point1[0] + point2[0]) * f;
-        y += (point1[1] + point2[1]) * f;
-      }
-
-      f = this.area() * 6;
-
-      return new Point(x / f, y / f);
-    };
+    ymaps.ready(init);
 
     const inspectedObject = {
       type: "FeatureCollection",
       features: [
         {
           type: "Feature",
-          id: 1111,
+          id: 101,
           options: {
-            fillColor: "rgb(255,0,0)", // Цвет заливки
-            opacity: 0.6, // Прозрачность объекта (1 = 100%)
+            fillColor: "#F3722C", // Цвет заливки
+            opacity: 0.8, // Прозрачность объекта (1 = 100%)
             strokeColor: "#F94144", // Цвет обводки
             strokeWidth: 2, // Толщина обводки
           },
@@ -184,11 +136,51 @@
             type: "Polygon",
             coordinates: [
               [
-                [55.822290971180454, 37.552642822265625],
-                [55.83396742969946, 37.518310546875],
-                [55.8578812028016, 37.540283203125],
-                [55.82895138701898, 37.57118225097656],
-                [55.822390971180454, 37.552642822265625],
+                [55.801280971180454, 37.552642822265625],
+                [55.81285742969946, 37.518310546875],
+                [55.8367712028016, 37.540283203125],
+                [55.80784138701898, 37.57118225097656],
+                [55.801280971180454, 37.552642822265625],
+              ],
+              [
+                [55.901280971180454, 37.552642822265625],
+                [55.91285742969946, 37.518310546875],
+                [55.9367712028016, 37.540283203125],
+                [55.90784138701898, 37.57118225097656],
+                [55.901280971180454, 37.552642822265625],
+              ],
+            ],
+          },
+        },
+        {
+          type: "Feature",
+          id: 102,
+          options: {
+            fillColor: "#F3722C", // Цвет заливки
+            opacity: 0.8, // Прозрачность объекта (1 = 100%)
+            strokeColor: "#F94144", // Цвет обводки
+            strokeWidth: 2, // Толщина обводки
+          },
+          properties: {
+            balloonContent: "Исследуемый объект",
+            hintContent: "Произвольный многоугольник",
+          },
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [55.801280971180454, 37.652642822265625],
+                [55.81285742969946, 37.618310546875],
+                [55.8367712028016, 37.640283203125],
+                [55.80784138701898, 37.67118225097656],
+                [55.801280971180454, 37.652642822265625],
+              ],
+              [
+                [55.901280971180454, 37.652642822265625],
+                [55.91285742969946, 37.618310546875],
+                [55.9367712028016, 37.640283203125],
+                [55.90784138701898, 37.67118225097656],
+                [55.901280971180454, 37.652642822265625],
               ],
             ],
           },
@@ -196,39 +188,7 @@
       ],
     };
 
-    const polygon = inspectedObject.features[0].geometry.coordinates[0];
-    const region = new Region(polygon);
-    const inspectedObjectCenterPoint = region.centroid();
-
-    const inspectedObjectCenterMarker = {
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          id: 1112,
-          geometry: {
-            type: "Point",
-            coordinates: [
-              inspectedObjectCenterPoint.x,
-              inspectedObjectCenterPoint.y,
-            ],
-          },
-          properties: {
-            balloonContent: `
-            <h3>Координаты центра масс полигона:</h3>
-            ${inspectedObjectCenterPoint.y.toFixed(7)},
-            ${inspectedObjectCenterPoint.x.toFixed(7)}`,
-            clusterCaption: "Центр масс полигона",
-            hintContent: "Центр масс полигона",
-            iconContent: "Можно даже так",
-          },
-          options: {
-            iconColor: "#F94144",
-            preset: "islands#redStretchyIcon",
-          },
-        },
-      ],
-    };
+    const inspectedObjectCenterMarkers = getCenterPoints(inspectedObject);
 
     var layersIndex = [
       {
@@ -493,7 +453,94 @@
       },
     ];
 
-    ymaps.ready(init);
+    function getCenterPoints(inspectedGeoObject) {
+      if (inspectedGeoObject.features.length == 0) return null;
+
+      function Point(x, y) {
+        this.x = x;
+        this.y = y;
+      }
+
+      function Region(points) {
+        this.points = points || [];
+        this.length = points.length;
+      }
+
+      Region.prototype.area = function () {
+        let area = 0,
+          i,
+          j,
+          point1,
+          point2;
+
+        for (i = 0, j = this.length - 1; i < this.length; j = i, i++) {
+          point1 = this.points[i];
+          point2 = this.points[j];
+          area += point1[0] * point2[1];
+          area -= point1[1] * point2[0];
+        }
+        area /= 2;
+
+        return area;
+      };
+
+      Region.prototype.centroid = function () {
+        let x = 0,
+          y = 0,
+          i,
+          j,
+          f,
+          point1,
+          point2;
+
+        for (i = 0, j = this.length - 1; i < this.length; j = i, i++) {
+          point1 = this.points[i];
+          point2 = this.points[j];
+          f = point1[0] * point2[1] - point2[0] * point1[1];
+          x += (point1[0] + point2[0]) * f;
+          y += (point1[1] + point2[1]) * f;
+        }
+
+        f = this.area() * 6;
+
+        return new Point(x / f, y / f);
+      };
+
+      const centerPointsArr = {
+        type: "FeatureCollection",
+        features: [],
+      };
+
+      for (let feature of inspectedGeoObject.features) {
+        for (let polygonPoints of feature.geometry.coordinates) {
+          let region = new Region(polygonPoints);
+          let polygonCenter = region.centroid();
+
+          centerPointsArr.features.push({
+            type: "Feature",
+            id: centerPointsArr.features.length,
+            geometry: {
+              type: "Point",
+              coordinates: [polygonCenter.x, polygonCenter.y],
+            },
+            properties: {
+              balloonContent: `
+            <h3>Координаты центра масс полигона:</h3>
+            ${polygonCenter.y.toFixed(7)},
+            ${polygonCenter.x.toFixed(7)}`,
+              hintContent:
+                "Центр масс полигона " + centerPointsArr.features.length,
+              iconContent: centerPointsArr.features.length,
+            },
+            options: {
+              iconColor: "#F94144",
+              preset: "islands#redIcon",
+            },
+          });
+        }
+      }
+      return centerPointsArr;
+    }
 
     function init() {
       let myMap;
@@ -533,7 +580,7 @@
       myMap.geoObjects.add(objectManager);
 
       objectManager.add(inspectedObject);
-      objectManager.add(inspectedObjectCenterMarker);
+      objectManager.add(inspectedObjectCenterMarkers);
 
       objectsButton.addEventListener(
         "click",
