@@ -44,6 +44,16 @@
         padding: 0.7rem 1.1rem;
         margin: 1rem 1rem 1rem 37.5rem;
       }
+      @media (max-width: 778px) {
+        .button {
+          margin-left: 12rem;
+        }
+      }
+      @media (max-width: 512px) {
+        .button {
+          margin-left: 8.5rem;
+        }
+      }
 
       .button:hover {
         transition: background-color 0.3s;
@@ -169,18 +179,18 @@
             type: "Polygon",
             coordinates: [
               [
-                [55.801280971180454, 37.652642822265625],
-                [55.81285742969946, 37.618310546875],
-                [55.8367712028016, 37.640283203125],
-                [55.80784138701898, 37.67118225097656],
-                [55.801280971180454, 37.652642822265625],
+                [55.801280971180454, 36.652642822265625],
+                [55.81285742969946, 36.618310546875],
+                [55.8367712028016, 36.640283203125],
+                [55.80784138701898, 36.67118225097656],
+                [55.801280971180454, 36.652642822265625],
               ],
               [
-                [55.901280971180454, 37.652642822265625],
-                [55.91285742969946, 37.618310546875],
-                [55.9367712028016, 37.640283203125],
-                [55.90784138701898, 37.67118225097656],
-                [55.901280971180454, 37.652642822265625],
+                [55.201280971180454, 37.652642822265625],
+                [55.21285742969946, 37.618310546875],
+                [55.2367712028016, 37.640283203125],
+                [55.20784138701898, 37.67118225097656],
+                [55.201280971180454, 37.652642822265625],
               ],
             ],
           },
@@ -506,19 +516,22 @@
         return new Point(x / f, y / f);
       };
 
+      let allObjectPoints = [];
       const centerPointsArr = {
         type: "FeatureCollection",
         features: [],
+        allPoints: [],
       };
 
       for (let feature of inspectedGeoObject.features) {
         for (let polygonPoints of feature.geometry.coordinates) {
+          allObjectPoints = allObjectPoints.concat(polygonPoints);
           let region = new Region(polygonPoints);
           let polygonCenter = region.centroid();
 
           centerPointsArr.features.push({
             type: "Feature",
-            id: centerPointsArr.features.length,
+            id: 70000 + centerPointsArr.features.length,
             geometry: {
               type: "Point",
               coordinates: [polygonCenter.x, polygonCenter.y],
@@ -539,31 +552,26 @@
           });
         }
       }
+
+      centerPointsArr.allPoints = allObjectPoints;
       return centerPointsArr;
     }
 
     function init() {
       let myMap;
-
-      const curUrl = window.location;
-      const url = new URL(curUrl);
-      const searchParams = new URLSearchParams(url.search);
-      const objectsButton = document.querySelector("#objectsButton");
-      const objectsButtonMenu = document.querySelector(".button-menu");
+      const curUrl = window.location,
+        url = new URL(curUrl),
+        searchParams = new URLSearchParams(url.search),
+        objectsButton = document.querySelector("#objectsButton"),
+        objectsButtonMenu = document.querySelector(".button-menu");
 
       getLayers();
 
-      myMap = new ymaps.Map(
-        "map",
-        {
-          bounds: ymaps.util.bounds.fromPoints(
-            inspectedObject.features[0].geometry.coordinates[0]
-          ),
-        },
-        {
-          searchControlProvider: "yandex#search",
-        }
-      );
+      myMap = new ymaps.Map("map", {
+        bounds: ymaps.util.bounds.fromPoints(
+          inspectedObjectCenterMarkers.allPoints
+        ),
+      });
 
       const objectManager = new ymaps.ObjectManager({});
 
